@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Carmine Zaccagnino — Computer Vision Researcher</title>
+<meta name="description" content="Carmine Zaccagnino — Researcher in Computer Vision and generative AI for documents at AImageLab, Università di Modena e Reggio Emilia." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,200..900,0..100,0..1;1,9..144,200..900,0..100,0..1&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper:        #efe9dc;
+    --paper-warm:   #e7dfcb;
+    --paper-deep:   #ddd1b3;
+    --ink:          #1a1d24;
+    --ink-soft:     #3a3d44;
+    --ink-faint:    #6a6862;
+    --oxblood:      #7a2818;
+    --oxblood-deep: #4a1810;
+    --rust:         #c25a2a;
+    --gold:         #9c7a2a;
+    --rule:         rgba(26, 29, 36, 0.18);
+    --rule-strong:  rgba(26, 29, 36, 0.5);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.6;
+    font-weight: 380;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Paper grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.12 0 0 0 0 0.08 0 0 0 0.12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Foxing — slight age stains on edges */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    background:
+      radial-gradient(ellipse at 0% 0%,   rgba(140, 90, 30, 0.10), transparent 35%),
+      radial-gradient(ellipse at 100% 0%, rgba(120, 70, 20, 0.08), transparent 30%),
+      radial-gradient(ellipse at 0% 100%, rgba(120, 70, 20, 0.08), transparent 30%),
+      radial-gradient(ellipse at 100% 100%, rgba(140, 90, 30, 0.10), transparent 35%);
+  }
+
+  /* ---------- Typographic primitives ---------- */
+  .display {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "SOFT" 50, "WONK" 0;
+    font-weight: 350;
+    letter-spacing: -0.025em;
+    line-height: 0.9;
+  }
+  .display em, .display .ital {
+    font-style: italic;
+    font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+  }
+  .serif {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 24;
+  }
+  .mono {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-feature-settings: "ss01" on, "ss02" on;
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 36px;
+    background: linear-gradient(to bottom, var(--paper) 60%, transparent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .topbar .mark {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "WONK" 1;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 20px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    text-transform: none;
+  }
+  .topbar nav { display: flex; gap: 28px; }
+  .topbar nav a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.2s;
+  }
+  .topbar nav a:hover { color: var(--oxblood); }
+  .topbar nav a::before {
+    content: attr(data-num);
+    margin-right: 6px;
+    color: var(--oxblood);
+    font-size: 9px;
+    vertical-align: super;
+  }
+
+  /* ---------- Layout ---------- */
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 48px;
+    position: relative;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 48px 80px;
+    position: relative;
+  }
+
+  .name {
+    font-size: clamp(72px, 14vw, 220px);
+    margin-bottom: 20px;
+    color: var(--ink);
+    animation: rise 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  .name .last {
+    display: block;
+    margin-left: clamp(20px, 8vw, 120px);
+    color: var(--oxblood);
+  }
+  .name .last .y {
+    font-style: italic;
+    font-variation-settings: "opsz" 144, "WONK" 1, "SOFT" 100;
+  }
+
+  .hero-sub {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: end;
+    gap: 60px;
+    margin-top: 40px;
+    animation: rise 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+  }
+  .hero-tagline {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 36;
+    font-style: italic;
+    font-weight: 350;
+    font-size: clamp(22px, 2.4vw, 32px);
+    line-height: 1.25;
+    color: var(--ink);
+    max-width: 480px;
+  }
+  .hero-tagline .accent { color: var(--oxblood); font-style: normal; font-weight: 400; }
+
+  .fleuron {
+    font-family: 'Fraunces', serif;
+    font-size: 64px;
+    color: var(--oxblood);
+    opacity: 0.55;
+    align-self: center;
+    transform: translateY(-10px);
+  }
+
+  .hero-loc {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    line-height: 1.9;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    text-align: right;
+    border-left: 1px solid var(--rule);
+    padding-left: 24px;
+    justify-self: end;
+    max-width: 240px;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll cue */
+  .scroll-cue {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  .scroll-cue::before {
+    content: '↓';
+    display: block;
+    text-align: center;
+    margin-bottom: 6px;
+    font-size: 14px;
+  }
+  @keyframes pulse { 0%,100% { opacity:0.45 } 50% { opacity:1 } }
+
+  /* ---------- Section frame ---------- */
+  section {
+    padding: 140px 0 80px;
+    position: relative;
+  }
+
+  .section-head {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 60px;
+    align-items: baseline;
+    margin-bottom: 80px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--oxblood);
+    text-transform: uppercase;
+  }
+  .section-num::before { content: '§ '; opacity: 0.55; }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "WONK" 1;
+    font-weight: 350;
+    font-size: clamp(40px, 6vw, 80px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .section-title em {
+    font-style: italic;
+    color: var(--oxblood);
+    font-variation-settings: "opsz" 144, "WONK" 1, "SOFT" 100;
+  }
+
+  /* ---------- About ---------- */
+  .about-body {
+    max-width: 780px;
+    margin: 0 auto;
+    font-family: 'Newsreader', serif;
+    font-size: 20px;
+    line-height: 1.7;
+    color: var(--ink);
+  }
+  .about-body p + p { margin-top: 1.1em; text-indent: 1.8em; }
+  .about-body .lead {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 36;
+    font-size: 24px;
+    line-height: 1.5;
+    font-weight: 380;
+    color: var(--ink);
+  }
+  .about-body em { font-style: italic; color: var(--oxblood); }
+  .dropcap::first-letter {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "WONK" 1;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--oxblood);
+    float: left;
+    font-size: 92px;
+    line-height: 0.85;
+    padding: 10px 14px 0 0;
+    margin-top: 6px;
+  }
+
+  /* ---------- Selected works / themes ---------- */
+  .theme {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 48px;
+    padding: 56px 0;
+    border-top: 1px solid var(--rule);
+    align-items: start;
+  }
+  .theme:last-of-type { border-bottom: 1px solid var(--rule); }
+  .theme-mark {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "WONK" 1;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--oxblood);
+    letter-spacing: -0.02em;
+  }
+  .theme-title {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 350;
+    font-size: clamp(28px, 3.4vw, 42px);
+    line-height: 1.1;
+    color: var(--ink);
+    margin-bottom: 22px;
+    letter-spacing: -0.018em;
+  }
+  .theme-title em {
+    font-style: italic;
+    color: var(--oxblood);
+    font-variation-settings: "opsz" 144, "WONK" 1, "SOFT" 100;
+  }
+  .theme-body p {
+    font-family: 'Newsreader', serif;
+    font-size: 19px;
+    line-height: 1.7;
+    color: var(--ink);
+    max-width: 720px;
+  }
+  .theme-body p em { font-style: italic; color: var(--oxblood); }
+  .theme-refs {
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px dotted var(--rule);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .theme-refs a {
+    text-decoration: none;
+    color: var(--ink-soft);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 24px;
+    align-items: baseline;
+    padding: 6px 0;
+    transition: color 0.2s, padding-left 0.2s;
+  }
+  .theme-refs a:hover { color: var(--oxblood); padding-left: 8px; }
+  .theme-refs .ref-title {
+    font-family: 'Newsreader', serif;
+    font-size: 15px;
+    line-height: 1.4;
+    font-style: italic;
+  }
+  .theme-refs .ref-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    white-space: nowrap;
+  }
+  .theme-refs a:hover .ref-meta { color: var(--oxblood); }
+
+  /* ---------- Books ---------- */
+  .books-intro {
+    max-width: 760px;
+    font-family: 'Newsreader', serif;
+    font-size: 19px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin-bottom: 64px;
+  }
+  #books .books-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 80px;
+  }
+  .book {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 36px;
+    align-items: start;
+  }
+  .book-cover-link {
+    display: block;
+    aspect-ratio: 3 / 4;
+    background: var(--paper-deep);
+    box-shadow:
+      -2px 0 0 var(--paper-deep),
+      -2px 0 8px rgba(0,0,0,0.08),
+      6px 8px 22px rgba(0,0,0,0.18);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+  }
+  .book-cover-link:hover {
+    transform: translate(-3px, -3px) rotate(-1.2deg);
+    box-shadow:
+      -2px 0 0 var(--paper-deep),
+      -2px 0 10px rgba(0,0,0,0.1),
+      10px 14px 32px rgba(0,0,0,0.22);
+  }
+  .book-cover-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .book-info h3 {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 36;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+  .book-info h3 em { font-style: italic; color: var(--oxblood); }
+  .book-info .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 14px;
+  }
+  .book-info p { font-size: 15px; line-height: 1.6; color: var(--ink-soft); }
+
+  /* ---------- Around & About (Flutter Modena) ---------- */
+  .modena-card {
+    display: block;
+    max-width: 720px;
+    text-decoration: none;
+    color: inherit;
+    background: var(--paper-warm);
+    padding: 56px 56px 48px;
+    position: relative;
+    border: 1px solid var(--rule);
+    transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+  }
+  .modena-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 6px; height: 100%;
+    background: var(--oxblood);
+    transition: width 0.3s;
+  }
+  .modena-card:hover {
+    transform: translate(-3px, -3px);
+    box-shadow: 8px 8px 0 var(--ink);
+    background: var(--paper);
+  }
+  .modena-card:hover::before { width: 10px; }
+
+  .modena-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 28px;
+  }
+  .modena-since { color: var(--oxblood); }
+
+  .modena-title {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-weight: 350;
+    font-size: clamp(48px, 6vw, 76px);
+    line-height: 0.95;
+    color: var(--ink);
+    letter-spacing: -0.025em;
+    margin-bottom: 24px;
+  }
+  .modena-title em {
+    font-style: italic;
+    color: var(--oxblood);
+    font-variation-settings: "opsz" 144, "WONK" 1, "SOFT" 100;
+  }
+
+  .modena-body {
+    font-family: 'Newsreader', serif;
+    font-size: 19px;
+    line-height: 1.65;
+    color: var(--ink);
+    max-width: 540px;
+    margin-bottom: 36px;
+  }
+
+  .modena-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--oxblood);
+  }
+  .modena-link .arr {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    transition: transform 0.3s;
+  }
+  .modena-card:hover .modena-link .arr { transform: translateX(8px); }
+
+  /* ---------- Pull quote ---------- */
+  .pullquote-section {
+    padding: 80px 0;
+    background: var(--paper-warm);
+    margin: 80px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .pullquote-section::before, .pullquote-section::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: var(--rule);
+  }
+  .pullquote-section::before { top: 0; }
+  .pullquote-section::after { bottom: 0; }
+  .pullquote {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "WONK" 1;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(34px, 5vw, 64px);
+    line-height: 1.1;
+    text-align: center;
+    max-width: 1000px;
+    margin: 0 auto;
+    color: var(--ink);
+    letter-spacing: -0.015em;
+  }
+  .pullquote .accent { color: var(--oxblood); }
+  .pullquote-mark {
+    font-family: 'Fraunces', serif;
+    font-size: 120px;
+    line-height: 0.5;
+    color: var(--oxblood);
+    opacity: 0.3;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  /* ---------- Footer / contact ---------- */
+  footer {
+    padding: 120px 48px 60px;
+    background: var(--ink);
+    color: var(--paper);
+    position: relative;
+  }
+  footer::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 8px;
+    background: var(--oxblood);
+  }
+  .foot-grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: end;
+  }
+  .foot-display {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "WONK" 1;
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(48px, 7vw, 96px);
+    line-height: 0.95;
+    color: var(--paper);
+    letter-spacing: -0.025em;
+  }
+  .foot-display .accent { color: var(--rust); font-style: normal; }
+  .foot-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 40px;
+  }
+  .foot-links a {
+    color: var(--paper);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(239, 233, 220, 0.18);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.2s, padding-left 0.2s, border-color 0.2s;
+  }
+  .foot-links a:hover {
+    color: var(--rust);
+    padding-left: 8px;
+    border-color: var(--rust);
+  }
+  .foot-links a span.arr {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    transition: transform 0.2s;
+  }
+  .foot-links a:hover span.arr { transform: translateX(4px); }
+  .foot-bottom {
+    max-width: 1280px;
+    margin: 80px auto 0;
+    padding-top: 28px;
+    border-top: 1px solid rgba(239, 233, 220, 0.15);
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(239, 233, 220, 0.5);
+  }
+  .foot-bottom a { color: inherit; text-decoration: none; }
+  .foot-bottom a:hover { color: var(--rust); }
+
+  /* ---------- Commonplace (Notebook) ---------- */
+  #commonplace .cp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .cp-intro .cp-domain {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--oxblood);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cp-intro .cp-domain::before {
+    content: '';
+    display: inline-block;
+    width: 24px;
+    height: 1px;
+    background: var(--oxblood);
+  }
+  .cp-intro p {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 36;
+    font-size: 22px;
+    line-height: 1.45;
+    font-weight: 380;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+  .cp-intro p em { font-style: italic; color: var(--oxblood); }
+  .cp-intro .cp-aside {
+    font-family: 'Newsreader', serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin-top: 24px;
+  }
+  .cp-visit {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 32px;
+    padding: 16px 24px;
+    background: var(--ink);
+    color: var(--paper);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    transition: background 0.25s, transform 0.25s;
+  }
+  .cp-visit:hover { background: var(--oxblood); transform: translate(2px, -2px); box-shadow: -4px 4px 0 var(--ink); }
+  .cp-visit .arr {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    transition: transform 0.25s;
+  }
+  .cp-visit:hover .arr { transform: translateX(4px); }
+
+  .cp-list {
+    list-style: none;
+    border-top: 1px solid var(--rule);
+  }
+  .cp-list li {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 28px;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+    transition: padding 0.3s, background 0.3s;
+  }
+  .cp-list li:hover { padding-left: 14px; padding-right: 14px; background: rgba(122, 40, 24, 0.04); }
+  .cp-list .cp-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    line-height: 1.5;
+  }
+  .cp-list .cp-date .yr {
+    display: block;
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 36, "WONK" 1;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--oxblood);
+    letter-spacing: 0;
+    font-weight: 400;
+  }
+  .cp-list .cp-post a {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 36;
+    font-size: 20px;
+    line-height: 1.3;
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 400;
+    display: block;
+    margin-bottom: 8px;
+    transition: color 0.2s;
+  }
+  .cp-list .cp-post a:hover { color: var(--oxblood); }
+  .cp-list .cp-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .cp-list .cp-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    background: var(--paper-warm);
+    padding: 3px 8px;
+    border-radius: 1px;
+  }
+  .cp-list .cp-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .topbar nav { display: none; }
+    .container, .hero { padding-left: 24px; padding-right: 24px; }
+    .hero-sub { grid-template-columns: 1fr; gap: 28px; }
+    .hero-loc { border-left: none; border-top: 1px solid var(--rule); padding-left: 0; padding-top: 16px; text-align: left; justify-self: start; }
+    .fleuron { display: none; }
+    .name .last { margin-left: 12px; }
+    .section-head { grid-template-columns: 1fr; gap: 12px; }
+    .theme { grid-template-columns: 1fr; gap: 16px; padding: 40px 0; }
+    .theme-mark { font-size: 40px; }
+    .theme-refs a { grid-template-columns: 1fr; gap: 4px; }
+    #books .books-grid { grid-template-columns: 1fr; gap: 48px; }
+    .modena-card { padding: 36px 28px 28px; }
+    #commonplace .cp-grid { grid-template-columns: 1fr; gap: 48px; }
+    .cp-list li { grid-template-columns: 60px 1fr; }
+    .cp-list .cp-num { display: none; }
+    .book { grid-template-columns: 110px 1fr; gap: 24px; }
+    .foot-grid { grid-template-columns: 1fr; gap: 48px; }
+    footer { padding: 80px 24px 40px; }
+    .foot-bottom { flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="mark">cz<span style="color:var(--oxblood)">.</span></div>
+  <nav>
+    <a href="#about"   data-num="01">About</a>
+    <a href="#works"   data-num="02">Work</a>
+    <a href="#books"   data-num="03">Books</a>
+    <a href="#commonplace" data-num="04">Notebook</a>
+    <a href="#activity" data-num="05">Around</a>
+    <a href="#contact" data-num="06">Contact</a>
+  </nav>
+</header>
+
+<!-- ======================================================== HERO -->
+<section class="hero">
+  <h1 class="name display">
+    Carmine
+    <span class="last">Zaccagn<span class="y">i</span>no</span>
+  </h1>
+
+  <div class="hero-sub">
+    <p class="hero-tagline">
+      Researcher in <span class="accent">document analysis</span> and generative AI for images — mostly working at their intersection.
+    </p>
+    <div class="fleuron">❦</div>
+    <div class="hero-loc">
+      AImageLab<br>
+      Università di Modena<br>
+      e Reggio Emilia<br>
+      <span style="color:var(--oxblood)">&mdash;</span><br>
+      In residence, 2024–
+    </div>
+  </div>
+
+  <div class="scroll-cue">Read on</div>
+</section>
+
+<!-- ======================================================== ABOUT -->
+<section id="about">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">01 — Hello</div>
+      <h2 class="section-title">A few <em>words</em>.</h2>
+    </div>
+
+    <div class="about-body">
+      <p class="lead dropcap">
+        I work on two things: computer vision applied to <em>documents</em>, and generative AI for editing images and infographics. They overlap considerably — most of the generative work targets text and graphics already on a page or in an infographic, putting it squarely in document territory. Earlier on, a couple of years of handwritten text recognition for historical documents.
+      </p>
+      <p>
+        I'm based in Modena, in Emilia-Romagna. The work happens at <em>AImageLab</em>, the computer-vision group of the University of Modena and Reggio Emilia, under the direction of Dr. Silvia Cascianelli.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== WORKS -->
+<section id="works">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">02 — Work</div>
+      <h2 class="section-title">What I'm <em>up to</em>.</h2>
+    </div>
+
+    <article class="theme">
+      <div class="theme-mark">I.</div>
+      <div class="theme-body">
+        <h3 class="theme-title">Editing what's <em>already in the image</em></h3>
+        <p>
+          Most of my present-day work is on teaching diffusion and autoregressive image models to <em>change</em> what's already there in an image — swap a label, fix a typo, alter a price — without redrawing everything around it. It's harder than it sounds: type and graphic context have a font, a weight, an alignment, a shadow, and these must survive the edit unchanged. The method is called <em>IDAttn</em> and the paper is going to ICML, on multi-instance editing in general, with infographics as the central application.
+        </p>
+        <div class="theme-refs">
+          <a href="https://arxiv.org/abs/2602.08749" target="_blank" rel="noopener"><span class="ref-title">Shifting the breaking point of flow matching for multi-instance editing</span><span class="ref-meta">ICML 2026 · arXiv 2602.08749</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="theme">
+      <div class="theme-mark">II.</div>
+      <div class="theme-body">
+        <h3 class="theme-title">Handwriting that looks like <em>a person's</em></h3>
+        <p>
+          Closely adjacent: getting models to <em>write</em>, in image, in a particular hand. Autoregressive image generators are not naturally good at being stylistically consistent or reliably legible at the same time; persuading them to be both is what <em>Eruku</em>, our WACV paper, is about.
+        </p>
+        <div class="theme-refs">
+          <a href="https://doi.org/10.1109/WACV61042.2026.00358" target="_blank" rel="noopener"><span class="ref-title">Autoregressive styled text image generation, but make it reliable</span><span class="ref-meta">WACV 2026</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="theme">
+      <div class="theme-mark">III.</div>
+      <div class="theme-body">
+        <h3 class="theme-title">Parsing historical <em>documents</em></h3>
+        <p>
+          Earlier work, still occasionally ongoing, on parsing and transcribing historical documents. The µgat paper (ECCV-W 2024) gives document parsers multi-page context for reading old Italian administrative records — <em>focatici</em>, household budgets — where period conventions only make sense with the whole manuscript in view. SCAM (ICDAR 2026) approaches a harder version of the same general problem: a new line-level HTR dataset built from an 11th-century Coptic manuscript in an extinct language, across leaves scattered across two archives and digitized under different conditions — a realistic benchmark for low-resource HTR.
+        </p>
+        <div class="theme-refs">
+          <a href="https://doi.org/10.1007/978-3-031-91572-7_13" target="_blank" rel="noopener"><span class="ref-title">µgat: Improving single-page document parsing by providing multi-page context</span><span class="ref-meta">ECCV-W 2024 · Springer</span></a>
+          <a href="#" target="_blank" rel="noopener"><span class="ref-title">A text recognition dataset from Sahidic Coptic ancient manuscripts</span><span class="ref-meta">ICDAR 2026</span></a>
+        </div>
+      </div>
+    </article>
+
+    <article class="theme">
+      <div class="theme-mark">IV.</div>
+      <div class="theme-body">
+        <h3 class="theme-title">And a side strand: <em>petrol stations</em></h3>
+        <p>
+          With friends in another lab I work on something altogether different — algorithms for routing drivers along the cheapest, fastest combinations of refueling stops on their itinerary. It started small and became <em>PIENO</em>, then a Q1 journal article, then a pair of follow-ups the year after.
+        </p>
+        <div class="theme-refs">
+          <a href="https://doi.org/10.1109/ACCESS.2024.3483959" target="_blank" rel="noopener"><span class="ref-title">P. I. E. N. O. — Petrol-filling Itinerary Estimation aNd Optimization</span><span class="ref-meta">IEEE Access · 2024 (Q1)</span></a>
+          <a href="https://doi.org/10.1109/CCNC65079.2026.11366260" target="_blank" rel="noopener"><span class="ref-title">A workflow for cost- and time-aware refueling itinerary optimization</span><span class="ref-meta">CCNC 2026</span></a>
+          <a href="https://doi.org/10.1109/CCNC65079.2026.11366496" target="_blank" rel="noopener"><span class="ref-title">RI-PIENO: Revised and improved PIENO</span><span class="ref-meta">CCNC 2026</span></a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ======================================================== BOOKS -->
+<section id="books">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">03 — Books</div>
+      <h2 class="section-title">Two volumes, both about <em>Flutter</em>.</h2>
+    </div>
+
+    <p class="books-intro">
+      Before computer vision was the day job there was a lot of cross-platform mobile development. Two books came out of those years — one in English with the Pragmatic Bookshelf in Raleigh, and an Italian companion with Hoepli in Milan the year after.
+    </p>
+
+    <div class="books-grid">
+      <article class="book">
+        <a class="book-cover-link" href="https://pragprog.com/titles/czflutr/programming-flutter/" target="_blank" rel="noopener">
+          <img class="book-cover-img" src="https://imagery.pragprog.com/products/578/czflutr_xlargecover.jpg"
+               alt="Programming Flutter — cover, Pragmatic Bookshelf, 2020" loading="lazy">
+        </a>
+        <div class="book-info">
+          <h3><em>Programming</em> Flutter</h3>
+          <div class="meta">Pragmatic Bookshelf · 2020 · ISBN 9781680506952</div>
+          <p>An English-language guide to building native cross-platform mobile apps with Flutter — published by the Pragmatic Bookshelf out of Raleigh, NC, edited by Michael Swaine.</p>
+        </div>
+      </article>
+
+      <article class="book">
+        <a class="book-cover-link" href="https://www.hoepli.it/libro/flutter/9788820399481.html" target="_blank" rel="noopener">
+          <img class="book-cover-img" src="https://copertine.hoepli.it/hoepli/xxl/978/8820/9788820399481.jpg"
+               alt="Flutter — Guida allo sviluppo di app performanti e cross-platform, Hoepli, 2020" loading="lazy">
+        </a>
+        <div class="book-info">
+          <h3><em>Flutter</em> — Guida allo sviluppo</h3>
+          <div class="meta">Hoepli · Milan, 2020 · ISBN 9788820399481</div>
+          <p>An Italian-language companion volume on building performant, cross-platform applications with Flutter — published by the historic Milanese house Hoepli.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== COMMONPLACE -->
+<section id="commonplace">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">04 — Commonplace</div>
+      <h2 class="section-title">A <em>notebook</em>, of sorts.</h2>
+    </div>
+
+    <div class="cp-grid">
+      <div class="cp-intro">
+        <div class="cp-domain">carmine.dev — est. 2018</div>
+        <p>
+          A long-running <em>commonplace</em> of writings on Flutter, Linux, Kubernetes &amp; the quieter workings of DevOps — kept somewhat irregularly, in the manner of a journeyman's notebook.
+        </p>
+        <p class="cp-aside">
+          Some pieces have appeared elsewhere too — on <em>Smashing Magazine</em> and other publications — gathered under the &ldquo;Articles I've Published Elsewhere&rdquo; section of the blog.
+        </p>
+        <a class="cp-visit" href="https://carmine.dev" target="_blank" rel="noopener">
+          Visit the blog <span class="arr">→</span>
+        </a>
+      </div>
+
+      <ul class="cp-list">
+        <li>
+          <span class="cp-date"><span class="yr">2022</span>Jul 7</span>
+          <div class="cp-post">
+            <a href="https://www.carmine.dev/posts/kubernetesselinux/" target="_blank" rel="noopener">Does Kubernetes support SELinux?</a>
+            <div class="cp-tags">
+              <span class="cp-tag">Kubernetes</span>
+              <span class="cp-tag">Linux</span>
+              <span class="cp-tag">DevOps</span>
+              <span class="cp-tag">Security</span>
+            </div>
+          </div>
+          <span class="cp-num">№ 01</span>
+        </li>
+        <li>
+          <span class="cp-date"><span class="yr">2022</span>Jul 2</span>
+          <div class="cp-post">
+            <a href="https://www.carmine.dev/posts/kubernetesclusterfcos/" target="_blank" rel="noopener">Creating a Kubernetes Cluster with Fedora CoreOS&nbsp;36</a>
+            <div class="cp-tags">
+              <span class="cp-tag">Kubernetes</span>
+              <span class="cp-tag">Linux</span>
+              <span class="cp-tag">DevOps</span>
+            </div>
+          </div>
+          <span class="cp-num">№ 02</span>
+        </li>
+        <li>
+          <span class="cp-date"><span class="yr">2021</span>Mar 17</span>
+          <div class="cp-post">
+            <a href="https://www.carmine.dev/posts/flutter2smashing/" target="_blank" rel="noopener">What's new in Flutter&nbsp;2? &nbsp;— <em style="font-style:italic;color:var(--oxblood)">Smashing Magazine</em></a>
+            <div class="cp-tags">
+              <span class="cp-tag">Flutter</span>
+              <span class="cp-tag">Web</span>
+              <span class="cp-tag">Desktop</span>
+            </div>
+          </div>
+          <span class="cp-num">№ 03</span>
+        </li>
+        <li>
+          <span class="cp-date"><span class="yr">2021</span>Feb 23</span>
+          <div class="cp-post">
+            <a href="https://www.carmine.dev/posts/oneyearbook/" target="_blank" rel="noopener">One year of <em style="font-style:italic;color:var(--oxblood)">Programming Flutter</em></a>
+            <div class="cp-tags">
+              <span class="cp-tag">Flutter</span>
+              <span class="cp-tag">Book</span>
+            </div>
+          </div>
+          <span class="cp-num">№ 04</span>
+        </li>
+        <li>
+          <span class="cp-date"><span class="yr">2020</span>Nov 17</span>
+          <div class="cp-post">
+            <a href="https://www.carmine.dev/posts/flutterweb/" target="_blank" rel="noopener">The current state of Flutter for the&nbsp;web</a>
+            <div class="cp-tags">
+              <span class="cp-tag">Flutter</span>
+              <span class="cp-tag">Web</span>
+            </div>
+          </div>
+          <span class="cp-num">№ 05</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== ACTIVITY -->
+<section id="activity">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">05 — Around &amp; About</div>
+      <h2 class="section-title">In <em>town</em>.</h2>
+    </div>
+
+    <a class="modena-card" href="https://fluttermodena.dev" target="_blank" rel="noopener">
+      <div class="modena-card-inner">
+        <div class="modena-meta">
+          <span class="modena-since">Since 2022</span>
+          <span class="modena-tag">Meetup · Modena</span>
+        </div>
+        <h3 class="modena-title">Flutter <em>Modena</em></h3>
+        <p class="modena-body">
+          A bi-monthly meetup for the local Flutter community — usually twenty to thirty people, usually at the same kind of place. I help run it.
+        </p>
+        <div class="modena-link">
+          <span>fluttermodena.dev</span>
+          <span class="arr">→</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ======================================================== FOOTER / CONTACT -->
+<footer id="contact">
+  <div class="foot-grid">
+    <div class="foot-display">
+      Get <em><span class="accent">in</span></em><br>
+      touch&nbsp;—
+    </div>
+    <div class="foot-links">
+      <a href="mailto:carmine@carminezacc.com">Email <span class="arr">↗</span></a>
+      <a href="https://scholar.google.com/citations?user=p9zTUzQAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar <span class="arr">↗</span></a>
+      <a href="https://carmine.dev" target="_blank" rel="noopener">Blog · carmine.dev <span class="arr">↗</span></a>
+      <a href="http://www.carminezacc.com" target="_blank" rel="noopener">carminezacc.com <span class="arr">↗</span></a>
+      <a href="https://github.com/carzacc" target="_blank" rel="noopener">GitHub <span class="arr">↗</span></a>
+      <a href="#" target="_blank" rel="noopener">ORCID <span class="arr">↗</span></a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© MMXXVI — Carmine Zaccagnino · P. IVA IT02118220769</span>
+    <span>Set in Fraunces &amp; Newsreader · Modena, Italy</span>
+  </div>
+</footer>
+
+<script>
+  // Soft fade-in for sections on scroll
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('section:not(.hero):not(.pullquote-section), .theme, .book, .modena-card, .cp-list li').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1)';
+    obs.observe(el);
+  });
+</script>
+
+</body>
+</html>
