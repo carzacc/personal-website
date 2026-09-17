@@ -213,6 +213,26 @@
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  .hero-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 56px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    animation: rise 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+  }
+  .hero-social a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    padding-bottom: 3px;
+    border-bottom: 1px solid var(--rule);
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .hero-social a:hover { color: var(--oxblood); border-color: var(--oxblood); }
+
   /* Scroll cue */
   .scroll-cue {
     position: absolute;
@@ -839,6 +859,13 @@
     </div>
   </div>
 
+  <div class="hero-social">
+    <a href="mailto:carmine@carminezacc.com">Email ↗</a>
+    <a href="https://scholar.google.com/citations?user=p9zTUzQAAAAJ&hl=en" target="_blank" rel="noopener">Google Scholar ↗</a>
+    <a href="https://github.com/carzacc" target="_blank" rel="noopener">GitHub ↗</a>
+    <a href="https://carmine.dev" target="_blank" rel="noopener">Blog ↗</a>
+  </div>
+
   <div class="scroll-cue">Read on</div>
 </section>
 
@@ -878,6 +905,7 @@
         </p>
         <div class="theme-refs">
           <a href="https://arxiv.org/abs/2602.08749" target="_blank" rel="noopener"><span class="ref-title">Shifting the breaking point of flow matching for multi-instance editing</span><span class="ref-meta">ICML 2026 · arXiv 2602.08749</span></a>
+          <a href="https://arxiv.org/abs/2606.31278" target="_blank" rel="noopener"><span class="ref-title">MICE: Editing everything everywhere all at once</span><span class="ref-meta">ECCV 2026 · arXiv 2606.31278</span></a>
         </div>
       </div>
     </article>
